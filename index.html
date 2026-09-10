@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tech Pulse — Test your general knowledge across science, geography, history, technology and the world with an interactive 5-question multiple-choice quiz.">
+  <title>Tech Pulse — General Knowledge Quiz</title>
+  
+  <!-- Modern Inter Font from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navigation Bar -->
+  <header class="app-header" id="app-header">
+    <div class="header-container">
+      <div class="brand-badge" id="brand-logo" role="banner">
+        <span class="brand-pulse-dot" aria-hidden="true"></span>
+        <div class="brand-text">
+          <span class="brand-title">TECH PULSE</span>
+          <span class="brand-subtitle">General Knowledge Quiz</span>
+        </div>
+      </div>
+      <div class="header-status" id="header-user-badge" style="display: none;">
+        <span class="user-badge-name" id="header-player-name">Player</span>
+        <span class="user-badge-mode" id="header-mode-tag">End Mode</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Wrapper -->
+  <main class="main-wrapper" id="app-main">
+
+    <!-- 1. WELCOME SCREEN -->
+    <section class="screen active" id="screen-welcome" aria-labelledby="welcome-title">
+      <div class="card welcome-card">
+        <div class="card-tag">ASSESSMENT MODULE</div>
+        <h1 id="welcome-title" class="welcome-heading">Tech Pulse Quiz</h1>
+        <p class="welcome-desc">
+          Test your knowledge across science, geography, history, technology, and the world. 
+          Each attempt selects 5 fresh questions from our 20-question challenge bank.
+        </p>
+
+        <!-- Name Input Form -->
+        <div class="form-group">
+          <label for="player-name-input" class="form-label">
+            Your Name <span class="required-star">*</span>
+          </label>
+          <div class="input-container">
+            <input 
+              type="text" 
+              id="player-name-input" 
+              class="text-input" 
+              placeholder="Enter your name..." 
+              maxlength="40"
+              autocomplete="name"
+              required
+            >
+          </div>
+          <span class="field-hint" id="name-error-msg" role="alert" style="display: none;">
+            Please enter your name to proceed.
+          </span>
+        </div>
+
+        <!-- Mode Selection Section -->
+        <div class="mode-section" role="radiogroup" aria-labelledby="mode-selection-label">
+          <div id="mode-selection-label" class="form-label">Choose Feedback Mode</div>
+          <div class="mode-cards-grid">
+            
+            <!-- Mode 1 Card -->
+            <label class="mode-card selected" id="mode-card-end" for="mode-radio-end">
+              <input 
+                type="radio" 
+                name="quiz-mode" 
+                id="mode-radio-end" 
+                value="end" 
+                checked
+              >
+              <div class="mode-radio-indicator" aria-hidden="true"></div>
+              <div class="mode-card-content">
+                <div class="mode-card-title">Results at the End</div>
+                <div class="mode-card-desc">
+                  Answer all 5 questions first. Your score, correct answers, and errors will be revealed upon submission.
+                </div>
+              </div>
+            </label>
+
+            <!-- Mode 2 Card -->
+            <label class="mode-card" id="mode-card-instant" for="mode-radio-instant">
+              <input 
+                type="radio" 
+                name="quiz-mode" 
+                id="mode-radio-instant" 
+                value="instant"
+              >
+              <div class="mode-radio-indicator" aria-hidden="true"></div>
+              <div class="mode-card-content">
+                <div class="mode-card-title">Reveal After Each Question</div>
+                <div class="mode-card-desc">
+                  Submit each question individually and immediately see instant feedback before moving forward.
+                </div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- Start Quiz Action -->
+        <div class="welcome-actions">
+          <button type="button" class="btn btn-primary btn-large" id="btn-start-quiz">
+            <span>Start Quiz</span>
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. QUIZ SCREEN -->
+    <section class="screen" id="screen-quiz" aria-labelledby="quiz-section-title" style="display: none;">
+      
+      <!-- Progress Bar & Indicator -->
+      <div class="progress-container" id="quiz-progress-section">
+        <div class="progress-header">
+          <div class="progress-title-group">
+            <span class="progress-eyebrow">QUESTION PROGRESS</span>
+            <span class="progress-counter" id="progress-counter-text">0 / 5 answered</span>
+          </div>
+          <div class="progress-percent" id="progress-percent-text">0%</div>
+        </div>
+        <div class="progress-track" role="progressbar" id="quiz-progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <h2 id="quiz-section-title" class="sr-only">Active Quiz Questions</h2>
+
+      <!-- Questions List Container (Dynamically Populated) -->
+      <div class="questions-container" id="quiz-questions-container">
+        <!-- Rendered by JavaScript -->
+      </div>
+
+      <!-- Validation Error Box -->
+      <div class="validation-alert" id="quiz-validation-alert" role="alert" style="display: none;">
+        <span class="alert-icon" aria-hidden="true">⚠</span>
+        <span class="alert-message" id="validation-alert-msg">Please answer all questions before submitting.</span>
+      </div>
+
+      <!-- Mode 1 Quiz Submit Action Bar -->
+      <div class="quiz-footer-actions" id="quiz-submit-bar">
+        <button type="button" class="btn btn-primary btn-large" id="btn-submit-quiz">
+          <span>Submit Quiz</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- 3. RESULTS SCREEN -->
+    <section class="screen" id="screen-results" aria-labelledby="results-title" style="display: none;">
+      
+      <!-- Result Summary Hero Card -->
+      <div class="card results-hero-card">
+        <div class="card-tag">QUIZ COMPLETE</div>
+        <h1 id="results-title" class="results-heading">
+          <span id="results-greeting">Great job, Player!</span>
+        </h1>
+        <p class="results-subtitle" id="results-feedback-phrase">
+          Here is your comprehensive score summary and performance breakdown.
+        </p>
+
+        <!-- Score Presentation Card -->
+        <div class="score-display-box">
+          <div class="score-main">
+            <span class="score-value" id="score-numerator">0</span>
+            <span class="score-divider">/</span>
+            <span class="score-denominator">5</span>
+          </div>
+          <div class="score-percent-badge" id="score-percent-badge">0%</div>
+        </div>
+
+        <!-- Pill Breakdown -->
+        <div class="score-stats-row">
+          <div class="stat-pill stat-correct">
+            <span class="stat-icon" aria-hidden="true">✓</span>
+            <span id="stat-correct-count">0 Correct</span>
+          </div>
+          <div class="stat-pill stat-incorrect">
+            <span class="stat-icon" aria-hidden="true">✕</span>
+            <span id="stat-incorrect-count">0 Incorrect</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Review Section -->
+      <section class="review-section" aria-labelledby="review-heading">
+        <div class="review-header">
+          <h2 id="review-heading" class="review-title">Answer Review</h2>
+          <span class="review-subtitle">Examine your answers against the correct solutions</span>
+        </div>
+
+        <div class="review-list" id="results-review-list">
+          <!-- Populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- Creator Portfolio Showcase Card -->
+      <aside class="creator-showcase-card" aria-label="Creator Information">
+        <div class="creator-info">
+          <div class="creator-badge-tag">PROJECT CREATOR</div>
+          <h3 class="creator-name">Crafted by <strong>Shadab</strong></h3>
+          <p class="creator-bio">
+            Enjoyed the quiz? Check out more creative web projects, full-stack apps, and engineering work on my portfolio.
+          </p>
+        </div>
+        <div class="creator-action">
+          <a href="https://sh4dabexe.netlify.app/" target="_blank" rel="noopener noreferrer" class="btn btn-portfolio" id="btn-view-portfolio">
+            <span>Explore Portfolio</span>
+            <span class="portfolio-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- Results Actions -->
+      <div class="results-actions-bar">
+        <button type="button" class="btn btn-primary btn-large" id="btn-restart-quiz">
+          <span class="btn-icon" aria-hidden="true">↻</span>
+          <span>Start Again</span>
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-change-settings">
+          <span>Change Player / Mode</span>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <span>Made by <a href="https://sh4dabexe.netlify.app/" target="_blank" rel="noopener noreferrer" class="footer-link"><strong>Shadab</strong></a></span>
+      <span class="footer-separator">&bull;</span>
+      <a href="https://sh4dabexe.netlify.app/" target="_blank" rel="noopener noreferrer" class="footer-link">Portfolio ↗</a>
+      <span class="footer-separator">&bull;</span>
+      <span>Tech Pulse &copy; 2026</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
